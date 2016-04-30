@@ -35,16 +35,22 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
 
-        if (count($data) != 0) {
+       if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
-                if ($item['type'] == 'd') {
-                    echo '<li><a href="'.wl($item['id'].':').'" class="twistienav_ns">'.hsc(ucwords(str_replace('_',' ',noNs($item['id'])))).'</a></li>';
-
-                } else {
-                    echo '<li>'.html_wikilink(':'.$item['id']).'</li>';
+                if (strcmp(noNs($item['id']),$conf['start'])) {
+                    if ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'].':'.$conf['start'],FALSE)) {
+                        $title=$title_tmp;
+                    } else {
+                        $title=hsc(noNs($item['id']));
+                    }
+                    if ($item['type'] == 'd') {
+                        echo '<li><a href="'.wl($item['id'].':').'" class="twistienav_ns">'.$title.'</a></li>';
+                    } else {
+                        echo '<li>'.html_wikilink(':'.$item['id']).'</li>';
+                    }
                 }
-            }
+            }    
             echo '</ul>';
         }
     }
