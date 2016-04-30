@@ -4,28 +4,28 @@
  * @author Håkan Sandell <sandell.hakan@gmail.com>
  */
 @font-face {
-    font-family: 'twistienav';
+    font-family: 'TwistieNav';
     src:
-        url('fonts/twistienav.ttf?4du7t3') format('truetype'),
-        url('fonts/twistienav.woff?4du7t3') format('woff'),
-        url('fonts/twistienav.svg?4du7t3#twistienav') format('svg');
+        url('fonts/TwistieNav.ttf?dhwpod') format('truetype'),
+        url('fonts/TwistieNav.woff?dhwpod') format('woff'),
+        url('fonts/TwistieNav.svg?dhwpod#TwistieNav') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 .dokuwiki div.breadcrumbs span.twistienav_twistie {
-    margin: 0 .4em 0 .2em;
+    margin: 0 .2em;
     padding: 0;
     background: none;
 }
 .dokuwiki div.breadcrumbs span.twistienav_twistie:before {
     font-family: twistienav;
     font-size: .9em;
-    content: "\e900";
+    content: "\e910";
     color: __text_alt__;
 }
 .dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before {
-    content: "\e907";
+    content: "\e902";
 }
 
 div#twistienav__popup {
