@@ -39,7 +39,9 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             echo '<ul>';
             foreach($data as $item){
                 if (strcmp(noNs($item['id']),$conf['start'])) {
-                    if ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'].':'.$conf['start'],FALSE)) {
+                    if (p_get_metadata($item['id'], 'plugin_croissant_bctitle') != null) {
+                        $title = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
+                    } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'].':'.$conf['start'],FALSE)) {
                         $title=$title_tmp;
                     } else {
                         $title=hsc(noNs($item['id']));
@@ -47,7 +49,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                     if ($item['type'] == 'd') {
                         echo '<li><a href="'.wl($item['id'].':').'" class="twistienav_ns">'.$title.'</a></li>';
                     } else {
-                        echo '<li>'.html_wikilink(':'.$item['id']).'</li>';
+                        echo '<li>'.html_wikilink(':'.$item['id'], $title).'</li>';
                     }
                 }
             }    
