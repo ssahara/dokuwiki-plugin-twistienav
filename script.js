@@ -52,6 +52,7 @@ var twistienav_plugin = {
         var linkNo;
         $links = $traceObj.find('a');
         $links.each(function () {
+
             var ns;
             var pagename;
 
@@ -62,9 +63,12 @@ var twistienav_plugin = {
             pagename = ns.substr(ns.lastIndexOf(':') + 1);
             ns = ns.substr(0, ns.lastIndexOf(':'));
 
-            // hide last twistie if current id is not a namespace start page
-            if (linkNo == 1 || pagename == JSINFO['conf']['start']) {
-                jQuery(document.createElement('span'))
+            // don't do anything if element has only a start page
+            if ((JSINFO.plugin_twistienav.ns_elements[ns] > 0) || (JSINFO.plugin_twistienav.ns_elements[ns] == null)) {
+
+                // hide last twistie if current id is not a namespace start page
+                if (linkNo == 1 || pagename == JSINFO['conf']['start']) {
+                    jQuery(document.createElement('span'))
                                 .addClass('twistienav_twistie')
                                 .show()
                                 .insertAfter(this)
@@ -75,6 +79,7 @@ var twistienav_plugin = {
                                         do_search(this, ns);
                                     }
                                 });
+                }
             }
         });
     },

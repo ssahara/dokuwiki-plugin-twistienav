@@ -24,8 +24,47 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
     }
 
     function populate_jsinfo(&$event, $params) {
-        global $JSINFO, $conf;
+        global $JSINFO, $conf, $ID;
+        $namespaces = array();
+        // Store $conf['start'] setting value
         $JSINFO['conf']['start'] = $conf['start'];
+        // List the number of sub-namespaces and pages for each "youarehere" namespace (excluding start page)
+        if ($conf['youarehere']) {
+            $parts = explode(':', $ID);
+            $count = count($parts);
+            $part = '';
+            for($i = 0; $i < $count - 1; $i++) {
+                $part .= $parts[$i].':';
+                if ($part == $conf['start']) continue; // Skip startpage
+                array_push($namespaces, rtrim($part, ":"));
+            }
+        }
+        // List the number of sub-namespaces and pages for each namespace in breadcrumbs (excluding start page)
+        if ($conf['breadcrumbs']) {
+            $crumbs = breadcrumbs();
+            // get namespaces currently in $crumbs
+            foreach ($crumbs as $crumbId => $crumb) {
+                if (getNS($crumbId) != null) {
+                    array_push($namespaces, getNS($crumbId));
+                }
+            }
+        }
+        // Cleanup multiple values in $namespaces
+        $namespaces = array_unique($namespaces);
+//dbg($namespaces);
+        if (count($namespaces > 0)) {
+            foreach ($namespaces as $namespace) {
+                $elements = 0;
+                $path = $conf['savedir']."/pages/".str_replace(":", "/", $namespace);
+                foreach (new DirectoryIterator($path) as $fileInfo) {
+                    if ($fileInfo->isDot()) continue;
+                    if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
+                        $elements++;
+                    }
+                }
+                $JSINFO['plugin_twistienav']['ns_elements'][$namespace] = $elements;
+            }
+        }
     }
 
     function handle_ajax_call(&$event, $params) {
