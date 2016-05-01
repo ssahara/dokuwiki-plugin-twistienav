@@ -63,7 +63,7 @@ var twistienav_plugin = {
             ns = ns.substr(0, ns.lastIndexOf(':'));
 
             // hide last twistie if current id is not a namespace start page
-            if (linkNo == 1 || pagename == 'start') {
+            if (linkNo == 1 || pagename == JSINFO['conf']['start']) {
                 jQuery(document.createElement('span'))
                                 .addClass('twistienav_twistie')
                                 .show()
