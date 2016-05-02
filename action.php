@@ -25,11 +25,12 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
     function populate_jsinfo(&$event, $params) {
         global $JSINFO, $conf, $ID;
+
         $namespaces = array();
         // Store $conf['start'] setting value
         $JSINFO['conf']['start'] = $conf['start'];
         // List the number of sub-namespaces and pages for each "youarehere" namespace (excluding start page)
-        if ($conf['youarehere']) {
+        if ($conf['youarehere'] == 1) {
             $parts = explode(':', $ID);
             $count = count($parts);
             $part = '';
@@ -80,7 +81,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
 
-       if (count($data) != 0) {
+        if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
                 if (strcmp(noNs($item['id']),$conf['start'])) {
@@ -97,7 +98,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                         echo '<li>'.html_wikilink(':'.$item['id'], $title).'</li>';
                     }
                 }
-            }    
+            }
             echo '</ul>';
         }
     }

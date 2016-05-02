@@ -63,8 +63,8 @@ var twistienav_plugin = {
             pagename = ns.substr(ns.lastIndexOf(':') + 1);
             ns = ns.substr(0, ns.lastIndexOf(':'));
 
-            // don't do anything if element has only a start page
-            if ((JSINFO.plugin_twistienav.ns_elements[ns] > 0) || (JSINFO.plugin_twistienav.ns_elements[ns] == null)) {
+            // don't do anything if ns has only a start page (except for wiki root: ns == '')
+            if ((ns == '') || (JSINFO.plugin_twistienav.ns_elements[ns] > 0)) {
 
                 // hide last twistie if current id is not a namespace start page
                 if (linkNo == 1 || pagename == JSINFO['conf']['start']) {
