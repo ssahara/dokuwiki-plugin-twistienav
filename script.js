@@ -41,11 +41,10 @@ var twistienav_plugin = {
             );
         };
 
-        // remove all '»' (might not work in special templates) and remove current id highlight
+        // remove current id highlight because it is inherited by popup
         trace = $traceObj.html();
         trace = trace.replace(/<span class="curid">/gi,'')
-                     .replace(/<\/span>$/gi,'')
-                     .replace(/>\s.\s</gi,'><');
+                     .replace(/<\/span>$/gi,'');
         $traceObj.html(trace);
 
         // add new twisties
