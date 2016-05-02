@@ -6,13 +6,12 @@
 @font-face {
     font-family: 'TwistieNav';
     src:
-        url('fonts/TwistieNav.ttf?dhwpod') format('truetype'),
-        url('fonts/TwistieNav.woff?dhwpod') format('woff'),
-        url('fonts/TwistieNav.svg?dhwpod#TwistieNav') format('svg');
+        url('fonts/TwistieNav.ttf?e8m0zl') format('truetype'),
+        url('fonts/TwistieNav.woff?e8m0zl') format('woff'),
+        url('fonts/TwistieNav.svg?e8m0zl#TwistieNav') format('svg');
     font-weight: normal;
     font-style: normal;
 }
-
 .dokuwiki div.breadcrumbs span.twistienav_twistie {
     margin: 0 .2em;
     padding: 0;
@@ -27,7 +26,6 @@
 .dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before {
     content: "\e902";
 }
-
 div#twistienav__popup {
   background-color: #eef;
   color: #000;
@@ -39,17 +37,14 @@ div#twistienav__popup {
   text-align: left;
   padding: 0.2em;
 }
-
 div#twistienav__popup ul {
   margin: 0px;
   padding-left: 0px;
 }
-
 div#twistienav__popup ul li {
   margin-left: 0px;
   list-style: none;
 } 
-
 div#twistienav__popup ul li a.twistienav_ns {
   font-weight: bold;
 }
