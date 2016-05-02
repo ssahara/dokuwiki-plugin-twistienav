@@ -14,16 +14,15 @@ var twistienav_plugin = {
      */
     init: function () {
         var do_search;
-        var $traceObj = jQuery('div.youarehere');
-
-        if ($traceObj.length === 0) {
-            // try second breadcrumb instead
-            $traceObj = jQuery('div.breadcrumbs').not(':has(span.bcsep)');
-            if ($traceObj.length === 0) {
-                return;
-            }
+        if (jQuery('div.youarehere').length !== 0) {
+            $traceObj = jQuery('div.youarehere');
+            var $list = JSINFO['plugin_twistienav']['yah_ns'];
+        } else if (jQuery('div.trace').length !== 0) {
+            $traceObj = jQuery('div.trace');
+            var $list = JSINFO['plugin_twistienav']['bc_ns'];
+        } else {
+            return;
         }
-
         jQuery(document).click(function(e) {
             twistienav_plugin.clear_results();
         });
@@ -48,38 +47,27 @@ var twistienav_plugin = {
         $traceObj.html(trace);
 
         // add new twisties
-        var linkNo;
+        var linkNo = 0;
         $links = $traceObj.find('a');
         $links.each(function () {
-
-            var ns;
-            var pagename;
-
-            linkNo++;
-            ns = jQuery(this).attr('href');
-            ns = ns.substr(ns.indexOf('=') + 1);   // TODO - does not work with URL re-rewrite
-            
-            pagename = ns.substr(ns.lastIndexOf(':') + 1);
-            ns = ns.substr(0, ns.lastIndexOf(':'));
-
-            // don't do anything if ns has only a start page (except for wiki root: ns == '')
-            if ((ns == '') || (JSINFO.plugin_twistienav.ns_elements[ns] > 0)) {
-
-                // hide last twistie if current id is not a namespace start page
-                if (linkNo == 1 || pagename == JSINFO['conf']['start']) {
-                    jQuery(document.createElement('span'))
-                                .addClass('twistienav_twistie')
-                                .show()
-                                .insertAfter(this)
-                                .click(function() {
-                                    twistie_active = jQuery(this).hasClass('twistienav_down'); 
-                                    twistienav_plugin.clear_results();
-                                    if (!twistie_active) {
-                                        do_search(this, ns);
-                                    }
-                                });
-                }
+            var ns = $list[linkNo];
+            if (ns == false) {
+                ns = '';
             }
+            if ($list[linkNo] || $list[linkNo] == '') {
+                jQuery(document.createElement('span'))
+                            .addClass('twistienav_twistie')
+                            .show()
+                            .insertAfter(this)
+                            .click(function() {
+                                twistie_active = jQuery(this).hasClass('twistienav_down'); 
+                                twistienav_plugin.clear_results();
+                                if (!twistie_active) {
+                                    do_search(this, ns);
+                                }
+                            });
+            }
+            linkNo++;
         });
     },
 

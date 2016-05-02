@@ -27,9 +27,11 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         global $JSINFO, $conf, $ID;
 
         $namespaces = array();
+        $yah_ns = array(0 => '');
+        $bc_ns = array();
         // Store $conf['start'] setting value
         $JSINFO['conf']['start'] = $conf['start'];
-        // List the number of sub-namespaces and pages for each "youarehere" namespace (excluding start page)
+        // List namespaces for YOUAREHERE breadcrumbs
         if ($conf['youarehere'] == 1) {
             $parts = explode(':', $ID);
             $count = count($parts);
@@ -37,26 +39,38 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             for($i = 0; $i < $count - 1; $i++) {
                 $part .= $parts[$i].':';
                 if ($part == $conf['start']) continue; // Skip startpage
-                array_push($namespaces, rtrim($part, ":"));
+                $elements = 0;
+                // Check corresponding path for subfolders and pages (excluding start pages)
+                $path = $conf['savedir']."/pages/".str_replace(":", "/", rtrim($part, ":"));
+                if (is_dir($path)) {
+                    foreach (new DirectoryIterator($path) as $fileInfo) {
+                        if ($fileInfo->isDot()) continue;
+                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
+                            $elements++;
+                        }
+                    }
+                    if ($elements > 0) {
+                        $yah_ns[$i+1] = rtrim($part, ":");
+                    }
+
+                }
             }
+            $JSINFO['plugin_twistienav']['yah_ns'] = $yah_ns;
         }
-        // List the number of sub-namespaces and pages for each namespace in breadcrumbs (excluding start page)
+//dbg($yah_ns);
+//dbg($JSINFO);
+        // List namespaces for TRACE breadcrumbs
         if ($conf['breadcrumbs']) {
             $crumbs = breadcrumbs();
             // get namespaces currently in $crumbs
+            $i = -1;
             foreach ($crumbs as $crumbId => $crumb) {
-                if (getNS($crumbId) != null) {
-                    array_push($namespaces, getNS($crumbId));
-                }
-            }
-        }
-        // Cleanup multiple values in $namespaces
-        $namespaces = array_unique($namespaces);
-//dbg($namespaces);
-        if (count($namespaces > 0)) {
-            foreach ($namespaces as $namespace) {
+                $i++;
+//dbg(getNS($crumbId));
+                //array_push($namespaces, getNS($crumbId));
                 $elements = 0;
-                $path = $conf['savedir']."/pages/".str_replace(":", "/", $namespace);
+                // Check corresponding path for subfolders and pages (excluding start pages)
+                $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
 //dbg($path);
                 if (is_dir($path)) {
 //dbg($path);
@@ -66,9 +80,14 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                             $elements++;
                         }
                     }
-                    $JSINFO['plugin_twistienav']['ns_elements'][$namespace] = $elements;
+//dbg($elements);
+                    if ($elements > 1) {
+                        $bc_ns[$i] = getNS($crumbId);
+//dbg($bc_ns[$i]);
+                    }
                 }
             }
+            $JSINFO['plugin_twistienav']['bc_ns'] = $bc_ns;
         }
     }
 
