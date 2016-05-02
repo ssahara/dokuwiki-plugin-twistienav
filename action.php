@@ -57,13 +57,17 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             foreach ($namespaces as $namespace) {
                 $elements = 0;
                 $path = $conf['savedir']."/pages/".str_replace(":", "/", $namespace);
-                foreach (new DirectoryIterator($path) as $fileInfo) {
-                    if ($fileInfo->isDot()) continue;
-                    if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
-                        $elements++;
+//dbg($path);
+                if (is_dir($path)) {
+//dbg($path);
+                    foreach (new DirectoryIterator($path) as $fileInfo) {
+                        if ($fileInfo->isDot()) continue;
+                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
+                            $elements++;
+                        }
                     }
+                    $JSINFO['plugin_twistienav']['ns_elements'][$namespace] = $elements;
                 }
-                $JSINFO['plugin_twistienav']['ns_elements'][$namespace] = $elements;
             }
         }
     }
