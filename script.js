@@ -16,6 +16,9 @@ var twistienav_plugin = {
         if (jQuery('div.trace').length !== 0) {
             twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
         }
+        if (jQuery('div.pageId').length !== 0) {
+            twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
+        }
         return;
     },
 
@@ -60,6 +63,59 @@ var twistienav_plugin = {
             }
             if ($list[linkNo] || $list[linkNo] == '') {
                 jQuery(document.createElement('span'))
+                            .addClass('twistienav_twistie')
+                            .show()
+                            .insertAfter(this)
+                            .click(function() {
+                                twistie_active = jQuery(this).hasClass('twistienav_down'); 
+                                twistienav_plugin.clear_results();
+                                if (!twistie_active) {
+                                    do_search(this, ns);
+                                }
+                            });
+            }
+            linkNo++;
+        });
+    },
+
+    /**
+     * Turn 'pageId' element into a minimalistic hierarchical trace
+     */
+    pageIdTrace: function(div, ns_list){
+        var do_search;
+        var $traceObj = jQuery(div);
+        var $list = JSINFO['plugin_twistienav'][ns_list];
+
+        jQuery(document).click(function(e) {
+            twistienav_plugin.clear_results();
+        });
+        
+        do_search = function (caller, namespace) {
+            twistienav_plugin.$callerObj = jQuery(caller);
+            jQuery.post(
+                DOKU_BASE + 'lib/exe/ajax.php',
+                {
+                    call: 'plugin_twistienav',
+                    idx: encodeURI(namespace)
+                },
+                twistienav_plugin.onCompletion,
+                'html'
+            );
+        };
+
+        // Replace pageId text by prepared skeleton
+        $traceObj.html(JSINFO['plugin_twistienav']['pit_skeleton']);
+
+        // transform links into text "twisties"
+        var linkNo = 1;
+        $links = $traceObj.find('a');
+        $links.each(function () {
+            var ns = $list[linkNo];
+            if (ns == false) {
+                ns = '';
+            }
+            if ($list[linkNo] || $list[linkNo] == '') {
+                jQuery(this)
                             .addClass('twistienav_twistie')
                             .show()
                             .insertAfter(this)
