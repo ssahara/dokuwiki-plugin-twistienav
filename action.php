@@ -66,7 +66,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 $i++;
                 //array_push($namespaces, getNS($crumbId));
                 $elements = 0;
-                // Check corresponding path for subfolders and pages (excluding start pages)
+                // Check corresponding path for subfolders and pages (excluding start.txt and topbar.txt pages)
                 $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
                 if (is_dir($path)) {
                     foreach (new DirectoryIterator($path) as $fileInfo) {
@@ -97,12 +97,32 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
 
+        if (!plugin_isdisabled('pagetitle')) {
+            $pagetitleHelper = plugin_load('helper', 'pagetitle');
+        }
+
         if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
                 if (strcmp(noNs($item['id']),$conf['start'])) {
-                    if (p_get_metadata($item['id'], 'plugin_croissant_bctitle') != null) {
-                        $title = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
+                    // Get Croissant plugin page title if it exists
+                    $croissantTitle = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
+                    // Get PageTitle plugin page title if it exists
+                    if ($pagetitleHelper != null) {
+                        $pagetitleTitle = $pagetitleHelper->tpl_pagetitle($item['id'], false);
+                        // By default, if 'pagetitle' isn't set, the helper offers page id instead and we don't want that
+                        if ($pagetitleTitle == $item['id']) {
+                            $pagetitleTitle = null;
+                        }
+                    }
+
+                    if ($croissantTitle != null) {
+                        $title = $croissantTitle;
+                    // haven't been abble to use this meta tag from PageTitle plugin
+                    //} elseif (p_get_metadata($item['id'], 'shorttitle') != null) {
+                    //    $title = p_get_metadata($item['id'], 'shorttitle');
+                    } elseif ($pagetitleTitle!= null) {
+                        $title = $pagetitleTitle;
                     } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'].':'.$conf['start'],FALSE)) {
                         $title=$title_tmp;
                     } else {
