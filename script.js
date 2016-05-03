@@ -9,20 +9,24 @@ var twistienav_plugin = {
 
     $callerObj: null,
 
+    init: function () {
+        if (jQuery('div.youarehere').length !== 0) {
+            twistienav_plugin.breadcrumbs('div.youarehere', 'yah_ns');
+        }
+        if (jQuery('div.trace').length !== 0) {
+            twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
+        }
+        return;
+    },
+
     /**
      * Add twisties and link events 
      */
-    init: function () {
+    breadcrumbs: function(div, ns_list){
         var do_search;
-        if (jQuery('div.youarehere').length !== 0) {
-            $traceObj = jQuery('div.youarehere');
-            var $list = JSINFO['plugin_twistienav']['yah_ns'];
-        } else if (jQuery('div.trace').length !== 0) {
-            $traceObj = jQuery('div.trace');
-            var $list = JSINFO['plugin_twistienav']['bc_ns'];
-        } else {
-            return;
-        }
+        var $traceObj = jQuery(div);
+        var $list = JSINFO['plugin_twistienav'][ns_list];
+
         jQuery(document).click(function(e) {
             twistienav_plugin.clear_results();
         });
