@@ -45,7 +45,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 if (is_dir($path)) {
                     foreach (new DirectoryIterator($path) as $fileInfo) {
                         if ($fileInfo->isDot()) continue;
-                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
+                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
                             $elements++;
                         }
                     }
@@ -57,8 +57,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             }
             $JSINFO['plugin_twistienav']['yah_ns'] = $yah_ns;
         }
-//dbg($yah_ns);
-//dbg($JSINFO);
         // List namespaces for TRACE breadcrumbs
         if ($conf['breadcrumbs']) {
             $crumbs = breadcrumbs();
@@ -66,24 +64,19 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $i = -1;
             foreach ($crumbs as $crumbId => $crumb) {
                 $i++;
-//dbg(getNS($crumbId));
                 //array_push($namespaces, getNS($crumbId));
                 $elements = 0;
                 // Check corresponding path for subfolders and pages (excluding start pages)
                 $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
-//dbg($path);
                 if (is_dir($path)) {
-//dbg($path);
                     foreach (new DirectoryIterator($path) as $fileInfo) {
                         if ($fileInfo->isDot()) continue;
-                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt"))) {
+                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
                             $elements++;
                         }
                     }
-//dbg($elements);
-                    if ($elements > 1) {
+                    if ($elements > 0) {
                         $bc_ns[$i] = getNS($crumbId);
-//dbg($bc_ns[$i]);
                     }
                 }
             }
