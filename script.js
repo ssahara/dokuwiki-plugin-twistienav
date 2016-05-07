@@ -16,7 +16,7 @@ var twistienav_plugin = {
         if (jQuery('div.trace').length !== 0) {
             twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
         }
-        if (jQuery('div.pageId').length !== 0) {
+        if ((JSINFO['plugin_twistienav']['pit_skeleton'] != null) && (jQuery('div.pageId').length !== 0)) {
             twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
         }
         return;
