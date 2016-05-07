@@ -126,6 +126,18 @@ var twistienav_plugin = {
                                     do_search(this, ns);
                                 }
                             });
+            } else {
+                jQuery(this)
+                            .addClass('twistienav_twistie')
+                            .show()
+                            .insertAfter(this)
+                            .click(function() {
+                                twistie_active = jQuery(this).hasClass('twistienav_down'); 
+                                twistienav_plugin.clear_results();
+                                if (!twistie_active) {
+                                    do_search(this, '');
+                                }
+                            });
             }
             linkNo++;
         });

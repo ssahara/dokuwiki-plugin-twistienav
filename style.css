@@ -12,18 +12,21 @@
     font-weight: normal;
     font-style: normal;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie {
+.dokuwiki div.breadcrumbs span.twistienav_twistie,
+.dokuwiki a.twistienav_extratwistie {
     margin: 0 .2em;
     padding: 0;
     background: none;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie:before {
+.dokuwiki div.breadcrumbs span.twistienav_twistie:before,
+.dokuwiki a.twistienav_extratwistie:before {
     font-family: twistienav;
     font-size: .9em;
     content: "\e910";
     color: __text_alt__;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before {
+.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before,
+.dokuwiki a.twistienav_extratwistie.twistienav_down:before {
     content: "\e902";
 }
 div#twistienav__popup {

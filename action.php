@@ -99,6 +99,10 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 }
             }
             $skeleton .= end($parts)."</span>";
+            if ($this->getConf('pageIdExtraTwistie')) {
+                $skeleton .= '<a href="javascript:void(0)" class="twistienav_extratwistie"></a>';
+            }
+//dbg($skeleton);
             $JSINFO['plugin_twistienav']['pit_skeleton'] = $skeleton;
         }
     }

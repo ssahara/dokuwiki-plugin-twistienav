@@ -5,4 +5,5 @@
  * @author: Simon Delage <simon.geekitude@gmail.com>
  */
 
-$meta['pageIdTrace']    = array('onoff');
+$meta['pageIdTrace']        = array('onoff');
+$meta['pageIdExtraTwistie'] = array('onoff');
