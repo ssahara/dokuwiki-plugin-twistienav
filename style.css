@@ -17,6 +17,10 @@
     margin: 0 .2em;
     padding: 0;
     background: none;
+}
+.dokuwiki div.breadcrumbs span.twistienav_twistie,
+.dokuwiki a.twistienav_twistie ,
+.dokuwiki a.twistienav_extratwistie {
     cursor:alias;
 }
 .dokuwiki div.breadcrumbs span.twistienav_twistie:before,
@@ -30,6 +34,8 @@
 .dokuwiki a.twistienav_extratwistie:hover:before {
     color: __text_neu__;
 }
+.dokuwiki a.twistienav_twistie:hover,
+.dokuwiki a.twistienav_twistie:focus,
 .dokuwiki a.twistienav_extratwistie:hover,
 .dokuwiki a.twistienav_extratwistie:focus {
     text-decoration: none;
