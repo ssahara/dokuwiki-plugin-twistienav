@@ -52,16 +52,17 @@ div#twistienav__popup {
   opacity: 0.95;
   border: 1px solid __border__;
   background-color: __background_other__;
-  text-align: left;
   padding: 0.2em;
 }
 div#twistienav__popup ul {
   margin: 0px;
-  padding-left: 0px;
+  padding: 0px;
 }
-div#twistienav__popup ul li {
-  margin-left: 0px;
-  list-style: none;
+[dir=ltr] div#twistienav__popup ul li {
+    text-align: left;
+} 
+[dir=rtl] div#twistienav__popup ul li {
+    text-align: right;
 } 
 div#twistienav__popup ul li a.twistienav_ns {
   font-weight: bold;
