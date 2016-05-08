@@ -33,7 +33,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         // Store $conf['start'] setting value
         $JSINFO['conf']['start'] = $conf['start'];
         // List namespaces for YOUAREHERE breadcrumbs
-        if (($conf['youarehere'] == 1) or ($this->getConf('pageIdTrace'))) {
+        if (($conf['youarehere'] == 1) or ($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
             $parts = explode(':', $ID);
             $count = count($parts);
             $part = '';
@@ -84,21 +84,25 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $JSINFO['plugin_twistienav']['bc_ns'] = $bc_ns;
         }
         // Build 'pageIdTrace' skeleton if required
-        if ($this->getConf('pageIdTrace')) {
+        if (($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
             $skeleton = "<span>";
-            $parts = explode(':', $ID);
-            $count = count($parts);
-            $part = '';
-            for($i = 1; $i < $count; $i++) {
-                $part .= $parts[$i-1].':';
-                if ($part == $conf['start']) continue; // Skip startpage
-                if (isset($yah_ns[$i])) {
-                    $skeleton .= '<a href="javascript:void(0)">'.$parts[$i-1].'</a>:';
-                } else {
-                    $skeleton .= $parts[$i-1].':';
+            if ($this->getConf('pageIdTrace')) {
+                $parts = explode(':', $ID);
+                $count = count($parts);
+                $part = '';
+                for($i = 1; $i < $count; $i++) {
+                    $part .= $parts[$i-1].':';
+                    if ($part == $conf['start']) continue; // Skip startpage
+                    if (isset($yah_ns[$i])) {
+                        $skeleton .= '<a href="javascript:void(0)">'.$parts[$i-1].'</a>:';
+                    } else {
+                        $skeleton .= $parts[$i-1].':';
+                    }
                 }
+                $skeleton .= end($parts);
+            } else {
+                $skeleton .= $ID;
             }
-            $skeleton .= end($parts);
             if ($this->getConf('pageIdExtraTwistie')) {
                 $skeleton .= '<a href="javascript:void(0)" class="twistienav_extratwistie"></a>';
             }
