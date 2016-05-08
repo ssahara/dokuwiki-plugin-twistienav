@@ -170,12 +170,15 @@ var twistienav_plugin = {
                         .html(data)
                         .attr('id','twistienav__popup')
                         .css({
-                            'position':    'absolute',
-                            'top':         (pos.top +16)+'px',
-                            'left':        (pos.left+16)+'px'
-                            })
-                        .show()
-                        .insertAfter(twistienav_plugin.$callerObj)
+                            'position':    'absolute'
+                        })
+                        .appendTo("body")
+                        .position({
+                            "my": "left top",
+                            "at": "right bottom",
+                            "of": twistienav_plugin.$callerObj,
+                            "collision": "fit"
+                        })
                         .click(function() {
                             twistienav_plugin.clear_results();
                         });

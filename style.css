@@ -56,7 +56,12 @@ div#twistienav__popup {
 }
 div#twistienav__popup ul {
   margin: 0px;
-  padding: 0px;
+  padding: 5px;
+}
+div#twistienav__popup ul li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 [dir=ltr] div#twistienav__popup ul li {
     text-align: left;
