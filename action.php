@@ -66,19 +66,22 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $i = -1;
             foreach ($crumbs as $crumbId => $crumb) {
                 $i++;
-                //array_push($namespaces, getNS($crumbId));
-                $elements = 0;
-                // Check corresponding path for subfolders and pages (excluding start.txt and topbar.txt pages)
-                $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
-                if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $fileInfo) {
-                        if ($fileInfo->isDot()) continue;
-                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
-                            $elements++;
+                // Don't do anything unless 'startPagesOnly' setting is off or current breadcrumb leads to a namespace start page 
+                if (($this->getConf('startPagesOnly') == 0) or (strpos($crumbId, $conf['start']) !== false)) {
+                    //array_push($namespaces, getNS($crumbId));
+                    $elements = 0;
+                    // Check corresponding path for subfolders and pages (excluding start.txt and topbar.txt pages)
+                    $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
+                    if (is_dir($path)) {
+                        foreach (new DirectoryIterator($path) as $fileInfo) {
+                            if ($fileInfo->isDot()) continue;
+                            if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
+                                $elements++;
+                            }
                         }
-                    }
-                    if ($elements > 0) {
-                        $bc_ns[$i] = getNS($crumbId);
+                        if ($elements > 0) {
+                            $bc_ns[$i] = getNS($crumbId);
+                        }
                     }
                 }
             }
