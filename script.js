@@ -19,6 +19,7 @@ var twistienav_plugin = {
         if ((JSINFO['plugin_twistienav']['pit_skeleton'] != null) && (jQuery('div.pageId').length !== 0)) {
             twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
         }
+
         return;
     },
 
@@ -64,7 +65,7 @@ var twistienav_plugin = {
             if ($list[linkNo] || $list[linkNo] == '') {
                 var $classes = 'twistienav_twistie';
                 if ((JSINFO['plugin_twistienav']['twistiemap'] == 1) && (ns == '')) {
-                    $classes = 'twistienav_twistie twistienav_map';
+                    $classes = 'twistienav_map';
                 }
                 jQuery(document.createElement('span'))
                             .addClass($classes)
@@ -152,6 +153,7 @@ var twistienav_plugin = {
      */
     clear_results: function(){
         jQuery('.twistienav_twistie').removeClass('twistienav_down');
+        jQuery('.twistienav_map').removeClass('twistienav_down');
         jQuery('#twistienav__popup').remove();
     },
 

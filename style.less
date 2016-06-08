@@ -3,53 +3,65 @@
  *
  * @author Håkan Sandell <sandell.hakan@gmail.com>
  */
+/*
 @font-face {
-    font-family: 'TwistieNav';
+    font-family: 'twistienav';
     src:
-        url('fonts/TwistieNav.ttf?pcagg5') format('truetype'),
-        url('fonts/TwistieNav.woff?pcagg5') format('woff'),
-        url('fonts/TwistieNav.svg?pcagg5#TwistieNav') format('svg');
+        url('fonts/twistienav.ttf?5lqatv') format('truetype'),
+        url('fonts/twistienav.woff?5lqatv') format('woff'),
+        url('fonts/twistienav.svg?5lqatv#twistienav') format('svg');
     font-weight: normal;
     font-style: normal;
 }
-
 .dokuwiki div.breadcrumbs span.twistienav_twistie,
+.dokuwiki div.breadcrumbs span.twistienav_map,
 .dokuwiki a.twistienav_extratwistie {
-    margin: 0 .2em 0 .3em !important;
-    padding: 0;
-    background: none;
+    font-family: 'twistienav' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie,
-.dokuwiki a.twistienav_twistie ,
-.dokuwiki a.twistienav_extratwistie {
+.dokuwiki div.breadcrumbs span.twistienav_twistie:before {
+    content: "\900";
+    width: 1em;
+    height: 1em;
+}
+*/
+.dokuwiki div.breadcrumbs span.twistienav_twistie:before,
+.dokuwiki div.breadcrumbs span.twistienav_map:before,
+.dokuwiki a.twistienav_extratwistie:before {
+    margin: 0 0 0 3px;
     cursor:alias;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie:before,
+.dokuwiki div.breadcrumbs span.twistienav_twistie:before {
+    content: url(images/circle-right.svg);
+}
+/*
+.dokuwiki div.breadcrumbs span.twistienav_twistie:hover:before {
+    content: url(images/circle-right.svg);
+}
+*/
+.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before {
+    content: url(images/cancel-circle.svg) !important;
+}
+.dokuwiki div.breadcrumbs span.twistienav_map:before,
 .dokuwiki a.twistienav_extratwistie:before {
-    font-family: TwistieNav;
-    font-size: .9em;
-    content: "\e910";
-    color: @ini_text_alt;
+    content: url(images/map.svg);
 }
-.dokuwiki .twistienav_map:before {
-    content: "\e90c" !important;
-}
-.dokuwiki div.breadcrumbs span.twistienav_twistie:hover:before,
+/*
+.dokuwiki div.breadcrumbs span.twistienav_map:hover:before,
 .dokuwiki a.twistienav_extratwistie:hover:before {
-    color: @ini_text_neu;
+    content: url(images/map-full.svg);
 }
-.dokuwiki a.twistienav_twistie:hover,
-.dokuwiki a.twistienav_twistie:focus,
-.dokuwiki a.twistienav_extratwistie:hover,
-.dokuwiki a.twistienav_extratwistie:focus {
-    text-decoration: none;
-}
-.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before,
+*/
+.dokuwiki .twistienav_map.twistienav_down:before,
 .dokuwiki a.twistienav_extratwistie.twistienav_down:before {
-    content: "\e902";
-}
-.dokuwiki .twistienav_map.twistienav_down:before {
-    content: "\e90b" !important;
+    content: url(images/map-full.svg) !important;
 }
 div#twistienav__popup {
   background-color: #eef;
