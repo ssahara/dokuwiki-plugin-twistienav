@@ -3,65 +3,49 @@
  *
  * @author Håkan Sandell <sandell.hakan@gmail.com>
  */
-/*
-@font-face {
-    font-family: 'twistienav';
-    src:
-        url('fonts/twistienav.ttf?5lqatv') format('truetype'),
-        url('fonts/twistienav.woff?5lqatv') format('woff'),
-        url('fonts/twistienav.svg?5lqatv#twistienav') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-.dokuwiki div.breadcrumbs span.twistienav_twistie,
-.dokuwiki div.breadcrumbs span.twistienav_map,
-.dokuwiki a.twistienav_extratwistie {
-    font-family: 'twistienav' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-.dokuwiki div.breadcrumbs span.twistienav_twistie:before {
-    content: "\900";
-    width: 1em;
-    height: 1em;
-}
-*/
 .dokuwiki div.breadcrumbs span.twistienav_twistie:before,
 .dokuwiki div.breadcrumbs span.twistienav_map:before,
 .dokuwiki a.twistienav_extratwistie:before {
     margin: 0 0 0 3px;
     cursor:alias;
 }
-.dokuwiki div.breadcrumbs span.twistienav_twistie:before {
+.dokuwiki div.breadcrumbs span.twistienav_twistie.svg:before {
     content: url(images/circle-right.svg);
 }
-/*
-.dokuwiki div.breadcrumbs span.twistienav_twistie:hover:before {
-    content: url(images/circle-right.svg);
+.dokuwiki div.breadcrumbs span.twistienav_twistie.fa:before {
+    content: "\f0a9";
+    color: @ini_text_alt;
 }
-*/
-.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down:before {
+.dokuwiki div.breadcrumbs span.twistienav_twistie.fa:hover:before {
+    color: @ini_text_neu;
+}
+.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down.svg:before {
     content: url(images/cancel-circle.svg) !important;
 }
-.dokuwiki div.breadcrumbs span.twistienav_map:before,
-.dokuwiki a.twistienav_extratwistie:before {
+.dokuwiki div.breadcrumbs span.twistienav_twistie.twistienav_down.fa:before {
+    content: "\f057" !important;
+}
+.dokuwiki div.breadcrumbs span.twistienav_map.svg:before,
+.dokuwiki a.twistienav_extratwistie.svg:before {
     content: url(images/map.svg);
 }
-/*
-.dokuwiki div.breadcrumbs span.twistienav_map:hover:before,
-.dokuwiki a.twistienav_extratwistie:hover:before {
-    content: url(images/map-full.svg);
+.dokuwiki div.breadcrumbs span.twistienav_map.fa:before,
+.dokuwiki a.twistienav_extratwistie.fa:before {
+    content: "\f278";
+    color: @ini_text_alt;
 }
-*/
-.dokuwiki .twistienav_map.twistienav_down:before,
-.dokuwiki a.twistienav_extratwistie.twistienav_down:before {
+.dokuwiki div.breadcrumbs span.twistienav_map.fa:hover:before,
+.dokuwiki a.twistienav_extratwistie.fa:hover:before {
+    color: @ini_text_neu;
+}
+.dokuwiki .twistienav_map.twistienav_down.svg:before,
+.dokuwiki a.twistienav_extratwistie.twistienav_down.svg:before {
     content: url(images/map-full.svg) !important;
+}
+.dokuwiki .twistienav_map.twistienav_down.fa:before,
+.dokuwiki a.twistienav_extratwistie.twistienav_down.fa:before {
+    content: "\f279" !important;
+    margin: 0 1px 0 4px;
 }
 div#twistienav__popup {
   background-color: #eef;

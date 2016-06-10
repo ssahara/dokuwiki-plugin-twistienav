@@ -63,9 +63,9 @@ var twistienav_plugin = {
                 ns = '';
             }
             if ($list[linkNo] || $list[linkNo] == '') {
-                var $classes = 'twistienav_twistie';
+                var $classes = 'twistienav_twistie' + ' ' + JSINFO['plugin_twistienav']['style'];
                 if ((JSINFO['plugin_twistienav']['twistiemap'] == 1) && (ns == '')) {
-                    $classes = 'twistienav_map';
+                    $classes = 'twistienav_map' + ' ' + JSINFO['plugin_twistienav']['style'];
                 }
                 jQuery(document.createElement('span'))
                             .addClass($classes)
