@@ -6,6 +6,7 @@
  */
 
 $conf['startPagesOnly']     = 1;
+$conf['exclusions']         = 'start,sidebar';
 $conf['twistieMap']         = 0;
 $conf['pageIdTrace']        = 0;
 $conf['pageIdExtraTwistie'] = 1;

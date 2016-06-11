@@ -34,6 +34,14 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $JSINFO['conf']['start'] = $conf['start'];
         $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
+        if ($this->getConf('exclusions') != null) {
+            $exclusions = $this->getConf('exclusions');
+            $exclusions = str_replace("start", $conf['start'], $exclusions);
+            $exclusions = str_replace("sidebar", $conf['sidebar'], $exclusions);
+            $excluded = explode(",", $exclusions);
+        } else {
+            $excluded = array();
+        }
         // List namespaces for YOUAREHERE breadcrumbs
         if (($conf['youarehere'] == 1) or ($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
             $parts = explode(':', $ID);
@@ -48,7 +56,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 if (is_dir($path)) {
                     foreach (new DirectoryIterator($path) as $fileInfo) {
                         if ($fileInfo->isDot()) continue;
-                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
+                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && (!in_array($fileInfo->getBasename(".txt"), $excluded)))) {
                             $elements++;
                         }
                     }
@@ -76,7 +84,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                     if (is_dir($path)) {
                         foreach (new DirectoryIterator($path) as $fileInfo) {
                             if ($fileInfo->isDot()) continue;
-                            if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && ($fileInfo->getFilename() != $conf['start'].".txt") && ($fileInfo->getFilename() != "topbar.txt"))) {
+                            if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && (!in_array($fileInfo->getBasename(".txt"), $excluded)))) {
                                 $elements++;
                             }
                         }
@@ -114,7 +122,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 $skeleton .= '"></a>';
             }
             $skeleton .= "</span>";
-//dbg($skeleton);
             $JSINFO['plugin_twistienav']['pit_skeleton'] = $skeleton;
         }
     }
@@ -139,7 +146,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
-                if (strcmp(noNs($item['id']),$conf['start'])) {
+                if (strpos($this->getConf('exclusions'), noNs($item['id'])) === false) {
                     // Get Croissant plugin page title if it exists
                     $croissantTitle = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
                     // Get PageTitle plugin page title if it exists

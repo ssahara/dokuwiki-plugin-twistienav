@@ -6,6 +6,7 @@
  */
 
 $meta['startPagesOnly']     = array('onoff');
+$meta['exclusions']         = array('multicheckbox', '_choices' => array('start','sidebar'));
 $meta['twistieMap']         = array('onoff');
 $meta['pageIdTrace']        = array('onoff');
 $meta['pageIdExtraTwistie'] = array('onoff');
