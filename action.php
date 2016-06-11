@@ -51,7 +51,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 $part .= $parts[$i].':';
                 if ($part == $conf['start']) continue; // Skip startpage
                 $elements = 0;
-                // Check corresponding path for subfolders and pages (excluding start pages)
+                // Check corresponding path for subfolders and pages (excluding some pages corresponding to settings)
                 $path = $conf['savedir']."/pages/".str_replace(":", "/", rtrim($part, ":"));
                 if (is_dir($path)) {
                     foreach (new DirectoryIterator($path) as $fileInfo) {
@@ -129,12 +129,21 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
     function handle_ajax_call(&$event, $params) {
         global $conf;
 
-        if($event->data != 'plugin_twistienav') return;
+        // Process AJAX calls from 'plugin_twistienav' or 'plugin_twistienav_pageid'
+        if (($event->data != 'plugin_twistienav') && ($event->data != 'plugin_twistienav_pageid')) return;
         $event->preventDefault();
         $event->stopPropagation();
 
         $idx  = cleanID($_POST['idx']);
         $dir  = utf8_encodeFN(str_replace(':','/',$idx));
+        $exclusions = $this->getConf('exclusions');
+        // If AJAX caller is from 'pageId' we don't wan't to exclude start pages
+        if ($event->data == 'plugin_twistienav_pageid') {
+            $exclusions = str_replace("start", "", $exclusions);
+        } else {
+            $exclusions = str_replace("start", $conf['start'], $exclusions);
+        }
+        $exclusions = str_replace("sidebar", $conf['sidebar'], $exclusions);
 
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
@@ -146,7 +155,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
-                if (strpos($this->getConf('exclusions'), noNs($item['id'])) === false) {
+                if (strpos($exclusions, noNs($item['id'])) === false) {
                     // Get Croissant plugin page title if it exists
                     $croissantTitle = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
                     // Get PageTitle plugin page title if it exists

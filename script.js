@@ -100,7 +100,7 @@ var twistienav_plugin = {
             jQuery.post(
                 DOKU_BASE + 'lib/exe/ajax.php',
                 {
-                    call: 'plugin_twistienav',
+                    call: 'plugin_twistienav_pageid',
                     idx: encodeURI(namespace)
                 },
                 twistienav_plugin.onCompletion,
