@@ -6,8 +6,17 @@
 .dokuwiki div.breadcrumbs span.twistienav_twistie:before,
 .dokuwiki div.breadcrumbs span.twistienav_map:before,
 .dokuwiki a.twistienav_extratwistie:before {
-    margin: 0 0 0 3px;
     cursor: help;
+}
+[dir=ltr] .dokuwiki div.breadcrumbs span.twistienav_twistie:before,
+[dir=ltr] .dokuwiki div.breadcrumbs span.twistienav_map:before,
+[dir=ltr] .dokuwiki a.twistienav_extratwistie:before {
+    margin: 0 0 0 3px;
+}
+[dir=rtl] .dokuwiki div.breadcrumbs span.twistienav_twistie:before,
+[dir=rtl] .dokuwiki div.breadcrumbs span.twistienav_map:before,
+[dir=rtl] .dokuwiki a.twistienav_extratwistie:before {
+    margin: 0 3px 0 0;
 }
 .dokuwiki div.breadcrumbs span.twistienav_twistie.svg:before {
     content: url(images/circle-right.svg);
@@ -32,8 +41,15 @@
 .dokuwiki div.breadcrumbs span.twistienav_map.fa:before,
 .dokuwiki a.twistienav_extratwistie.fa:before {
     content: "\f278";
-    margin: 0 0 0 5px;
     color: @ini_text_alt;
+}
+[dir=ltr] .dokuwiki div.breadcrumbs span.twistienav_map.fa:before,
+[dir=ltr] .dokuwiki a.twistienav_extratwistie.fa:before {
+    margin: 0 0 0 5px;
+}
+[dir=rtl] .dokuwiki div.breadcrumbs span.twistienav_map.fa:before,
+[dir=rtl] .dokuwiki a.twistienav_extratwistie.fa:before {
+    margin: 0 5px 0 0;
 }
 .dokuwiki div.breadcrumbs span.twistienav_map.fa:hover:before,
 .dokuwiki a.twistienav_extratwistie.fa:hover:before {
@@ -46,7 +62,14 @@
 .dokuwiki .twistienav_map.twistienav_down.fa:before,
 .dokuwiki a.twistienav_extratwistie.twistienav_down.fa:before {
     content: "\f279" !important;
+}
+[dir=ltr] .dokuwiki .twistienav_map.twistienav_down.fa:before,
+[dir=ltr] .dokuwiki a.twistienav_extratwistie.twistienav_down.fa:before {
     margin: 0 1px 0 6px !important;
+}
+[dir=rtl] .dokuwiki .twistienav_map.twistienav_down.fa:before,
+[dir=rtl] .dokuwiki a.twistienav_extratwistie.twistienav_down.fa:before {
+    margin: 0 6px 0 1px !important;
 }
 div#twistienav__popup {
   background-color: #eef;

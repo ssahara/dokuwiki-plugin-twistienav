@@ -70,7 +70,7 @@ var twistienav_plugin = {
                 jQuery(document.createElement('span'))
                             .addClass($classes)
                             .show()
-                            .insertAfter(this)
+                            .insertAfter(jQuery(this).parent())
                             .click(function() {
                                 twistie_active = jQuery(this).hasClass('twistienav_down'); 
                                 twistienav_plugin.clear_results();
