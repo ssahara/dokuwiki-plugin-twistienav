@@ -1,6 +1,6 @@
 TwistieNav Plugin for DokuWiki
 
-Adds drop-down navigation menus to 'you are here' breadcrumbs
+Adds drop-down navigation menus to breadcrumbs (and eventually "pageId" element)
 
 All documentation for this plugin can be found at
 http://www.dokuwiki.org/plugin:twistienav
