@@ -174,7 +174,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                     //    $title = p_get_metadata($item['id'], 'shorttitle');
                     } elseif ($pagetitleTitle!= null) {
                         $title = $pagetitleTitle;
-                    } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'].':'.$conf['start'],FALSE)) {
+                    } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'],FALSE)) {
                         $title=$title_tmp;
                     } else {
                         $title=hsc(noNs($item['id']));
