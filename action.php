@@ -25,6 +25,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
     function populate_jsinfo(&$event, $params) {
         global $JSINFO, $conf, $ID;
+        global $excluded;
 
         $namespaces = array();
         $yah_ns = array(0 => '');
@@ -49,21 +50,22 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $part = '';
             for($i = 0; $i < $count - 1; $i++) {
                 $part .= $parts[$i].':';
-                if ($part == $conf['start']) continue; // Skip startpage
+                if ($part == $conf['start']) continue; // Skip start page
                 $elements = 0;
-                // Check corresponding path for subfolders and pages (excluding some pages corresponding to settings)
-                $path = $conf['savedir']."/pages/".str_replace(":", "/", rtrim($part, ":"));
-                if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $fileInfo) {
-                        if ($fileInfo->isDot()) continue;
-                        if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && (!in_array($fileInfo->getBasename(".txt"), $excluded)))) {
-                            $elements++;
-                        }
+                // Get index of current crumb namespace
+                $idx  = cleanID(getNs($part));
+                $dir  = utf8_encodeFN(str_replace(':','/',$idx));
+                $data = array();
+                search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
+                // Count pages that are not in configured exclusions
+                foreach ($data as $item) {
+                    if (!in_array(noNs($item['id']), $excluded)) {
+                        $elements++;
                     }
-                    if ($elements > 0) {
-                        $yah_ns[$i+1] = rtrim($part, ":");
-                    }
-
+                }
+                // If there's at least one page that isn't excluded, prepare JSINFO data for that crumb
+                if ($elements > 0) {
+                    $yah_ns[$i+1] = $idx;
                 }
             }
             $JSINFO['plugin_twistienav']['yah_ns'] = $yah_ns;
@@ -77,20 +79,21 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 $i++;
                 // Don't do anything unless 'startPagesOnly' setting is off or current breadcrumb leads to a namespace start page 
                 if (($this->getConf('startPagesOnly') == 0) or (strpos($crumbId, $conf['start']) !== false)) {
-                    //array_push($namespaces, getNS($crumbId));
                     $elements = 0;
-                    // Check corresponding path for subfolders and pages (excluding start.txt and topbar.txt pages)
-                    $path = $conf['savedir']."/pages/".str_replace(":", "/", getNS($crumbId));
-                    if (is_dir($path)) {
-                        foreach (new DirectoryIterator($path) as $fileInfo) {
-                            if ($fileInfo->isDot()) continue;
-                            if (($fileInfo->isDir()) or (($fileInfo->isFile()) && ($fileInfo->getExtension() == "txt") && (!in_array($fileInfo->getBasename(".txt"), $excluded)))) {
-                                $elements++;
-                            }
+                    // Get index of current crumb namespace
+                    $idx  = cleanID(getNs($crumbId));
+                    $dir  = utf8_encodeFN(str_replace(':','/',$idx));
+                    $data = array();
+                    search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
+                    // Count pages that are not in configured exclusions
+                    foreach ($data as $item) {
+                        if (!in_array(noNs($item['id']), $excluded)) {
+                            $elements++;
                         }
-                        if ($elements > 0) {
-                            $bc_ns[$i] = getNS($crumbId);
-                        }
+                    }
+                    // If there's at least one page that isn't excluded, prepare JSINFO data for that crumb
+                    if ($elements > 0) {
+                        $bc_ns[$i] = $idx;
                     }
                 }
             }
