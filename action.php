@@ -33,6 +33,8 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $pit_ns = array();
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
+        $JSINFO['conf']['breadcrumbs'] = $conf['breadcrumbs'];
+        $JSINFO['conf']['youarehere'] = $conf['youarehere'];
         $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
         if ($this->getConf('exclusions') != null) {
