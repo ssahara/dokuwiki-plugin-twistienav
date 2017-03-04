@@ -10,12 +10,23 @@ var twistienav_plugin = {
     $callerObj: null,
 
     init: function () {
+		var $match = 0;
         if (jQuery('div.youarehere').length !== 0) {
             twistienav_plugin.breadcrumbs('div.youarehere', 'yah_ns');
+			$match++;
         }
         if (jQuery('div.trace').length !== 0) {
             twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
+			$match++;
         }
+        if ($match == 0) {
+			if (jQuery('div.breadcrumbs:has("span.bcsep")').length !== 0) {
+				twistienav_plugin.breadcrumbs('div.breadcrumbs:has("span.bcsep")', 'bc_ns');
+			}
+			if (jQuery('div.breadcrumbs:not(:has("span.bcsep"))').length !== 0) {
+				twistienav_plugin.breadcrumbs('div.breadcrumbs:not(:has("span.bcsep"))', 'yah_ns');
+			}
+		}
         if ((JSINFO['plugin_twistienav']['pit_skeleton'] != null) && (jQuery('div.pageId').length !== 0)) {
             twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
         }
