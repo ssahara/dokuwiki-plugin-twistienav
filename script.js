@@ -59,11 +59,12 @@ var twistienav_plugin = {
             );
         };
 
+        // NOT REQUIRED ANYMORE
         // remove current id highlight because it is inherited by popup
-        trace = $traceObj.html();
-        trace = trace.replace(/<span class="curid">/gi,'')
-                     .replace(/<\/span>$/gi,'');
-        $traceObj.html(trace);
+        //trace = $traceObj.html();
+        //trace = trace.replace(/<span class="curid">/gi,'')
+        //             .replace(/<\/span>$/gi,'');
+        //$traceObj.html(trace);
 
         // add new twisties
         var linkNo = 0;
