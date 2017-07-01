@@ -161,23 +161,24 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             echo '<ul>';
             foreach($data as $item){
                 if (strpos($exclusions, noNs($item['id'])) === false) {
+                    // Build a namespace id that points to it's start page (even if it doesn't exist)
+                    if ($item['type'] == 'd') {
+                      $target = $item['id'].':'.$conf['start'];
+                    } else {
+                      $target = $item['id'];
+                    }
+
                     // Get Croissant plugin page title if it exists
-                    $croissantTitle = p_get_metadata($item['id'], 'plugin_croissant_bctitle');
+                    $croissantTitle = p_get_metadata($target, 'plugin_croissant_bctitle');
                     // Get PageTitle plugin page title if it exists
                     if ($pagetitleHelper != null) {
-                        $pagetitleTitle = $pagetitleHelper->tpl_pagetitle($item['id'], false);
-                        // By default, if 'pagetitle' isn't set, the helper offers page id instead and we don't want that
-                        if ($pagetitleTitle == $item['id']) {
-                            $pagetitleTitle = null;
-                        }
+                        $pagetitleTitle = $pagetitleHelper->tpl_pagetitle($target, false);
                     }
 
                     if ($croissantTitle != null) {
                         $title = $croissantTitle;
-                    // haven't been abble to use this meta tag from PageTitle plugin
-                    //} elseif (p_get_metadata($item['id'], 'shorttitle') != null) {
-                    //    $title = p_get_metadata($item['id'], 'shorttitle');
-                    } elseif ($pagetitleTitle!= null) {
+                    // Note that if there's no PageTitle plugin title set, the plugin still offers page name from metadata wich can be an ugly id wich is not what we want
+                    } elseif (($pagetitleTitle != null) && ($pagetitleTitle != $target) && ($pagetitleTitle != $item['id'])) {
                         $title = $pagetitleTitle;
                     } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'],FALSE)) {
                         $title=$title_tmp;
@@ -185,9 +186,9 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                         $title=hsc(noNs($item['id']));
                     }
                     if ($item['type'] == 'd') {
-                        echo '<li><a href="'.wl($item['id'].':').'" class="twistienav_ns">'.$title.'</a></li>';
+                        echo '<li><a href="'.wl($target).'" class="twistienav_ns">'.$title.'</a></li>';
                     } else {
-                        echo '<li>'.html_wikilink(':'.$item['id'], $title).'</li>';
+                        echo '<li>'.html_wikilink($target, $title).'</li>';
                     }
                 }
             }
