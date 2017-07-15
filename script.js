@@ -195,7 +195,7 @@ var twistienav_plugin = {
                             "my": "left top",
                             "at": "right bottom",
                             "of": twistienav_plugin.$callerObj,
-                            "collision": "fit"
+                            "collision": "flipfit"
                         })
                         .click(function() {
                             twistienav_plugin.clear_results();
