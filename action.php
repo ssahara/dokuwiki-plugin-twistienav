@@ -19,6 +19,7 @@ require_once DOKU_PLUGIN.'action.php';
 class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
     protected $title_metadata = array();
+    protected $exclusions     = array();
 
     function __construct() {
         global $conf;
@@ -32,6 +33,20 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             if(plugin_isdisabled($plugin)) unset($this->title_metadata[$plugin]);
         }
         $this->title_metadata[] = 'title';
+
+        // Convert "exclusions" config setting (csv) to array
+        foreach (explode(',', $this->getConf('exclusions')) as $page) {
+            switch ($page) {   // care pre-defined keys in multicheckbox
+                case 'start':
+                    $this->exclusions[] = $conf['start'];
+                    break;
+                case 'sidebar':
+                    $this->exclusions[] = $conf['sidebar'];
+                    break;
+                default:
+                    $this->exclusions[] = $page;
+            }
+        }
     }
 
     /**
@@ -47,7 +62,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
      */
     function populate_jsinfo(Doku_Event $event, $params) {
         global $JSINFO, $conf, $ID;
-        global $excluded;
 
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
@@ -55,15 +69,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $JSINFO['conf']['youarehere'] = $conf['youarehere'];
         $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
-
-        if ($this->getConf('exclusions') != null) {
-            $exclusions = $this->getConf('exclusions');
-            $exclusions = str_replace("start", $conf['start'], $exclusions);
-            $exclusions = str_replace("sidebar", $conf['sidebar'], $exclusions);
-            $excluded = explode(",", $exclusions);
-        } else {
-            $excluded = array();
-        }
 
         // List namespaces for YOUAREHERE breadcrumbs
         $yah_ns = array(0 => '');
@@ -82,7 +87,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
                 // Count pages that are not in configured exclusions
                 foreach ($data as $item) {
-                    if (!in_array(noNS($item['id']), $excluded)) {
+                    if (!in_array(noNS($item['id']), $this->exclusions)) {
                         $elements++;
                     }
                 }
@@ -102,8 +107,9 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $i = -1;
             foreach ($crumbs as $crumbId => $crumb) {
                 $i++;
-                // Don't do anything unless 'startPagesOnly' setting is off or current breadcrumb leads to a namespace start page 
-                if (($this->getConf('startPagesOnly') == 0) or (strpos($crumbId, $conf['start']) !== false)) {
+                // Don't do anything unless 'startPagesOnly' setting is off
+                //  or current breadcrumb leads to a namespace start page
+                if (($this->getConf('startPagesOnly') == 0) or (noNS($crumbId) == $conf['start'])) {
                     $elements = 0;
                     // Get index of current crumb namespace
                     $idx  = cleanID(getNS($crumbId));
@@ -112,7 +118,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                     search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
                     // Count pages that are not in configured exclusions
                     foreach ($data as $item) {
-                        if (!in_array(noNS($item['id']), $excluded)) {
+                        if (!in_array(noNS($item['id']), $this->exclusions)) {
                             $elements++;
                         }
                     }
@@ -170,41 +176,39 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $idx  = cleanID($_POST['idx']);
         $dir  = utf8_encodeFN(str_replace(':','/',$idx));
 
-        $exclusions = $this->getConf('exclusions');
         // If AJAX caller is from 'pageId' we don't wan't to exclude start pages
         if ($event->data == 'plugin_twistienav_pageid') {
-            $exclusions = str_replace("start", "", $exclusions);
+            $exclusions = array_diff($this->exclusions, array($conf['start']));
         } else {
-            $exclusions = str_replace("start", $conf['start'], $exclusions);
+            $exclusions = $this->exclusions;
         }
-        $exclusions = str_replace("sidebar", $conf['sidebar'], $exclusions);
 
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
 
         if (count($data) != 0) {
             echo '<ul>';
-            foreach($data as $item){
-                if (strpos($exclusions, noNS($item['id'])) === false) {
-                    // Build a namespace id that points to it's start page (even if it doesn't exist)
-                    if ($item['type'] == 'd') {
-                      $target = $item['id'].':'.$conf['start'];
-                    } else {
-                      $target = $item['id'];
-                    }
+            foreach ($data as $item) {
+                if (in_array(noNS($item['id']), $exclusions)) continue;
 
-                    // Get title of the page from metadata
-                    foreach ($this->title_metadata as $plugin => $key) {
-                        $title = p_get_metadata($target, $key, METADATA_DONT_RENDER);
-                        if ($title != null) break;
-                    }
-                    $title = @$title ?: hsc(noNS($item['id']));
+                // Build a namespace id that points to it's start page (even if it doesn't exist)
+                if ($item['type'] == 'd') {
+                    $target = $item['id'].':'.$conf['start'];
+                } else {
+                    $target = $item['id'];
+                }
 
-                    if ($item['type'] == 'd') {
-                        echo '<li><a href="'.wl($target).'" class="twistienav_ns">'.$title.'</a></li>';
-                    } else {
-                        echo '<li>'.html_wikilink($target, $title).'</li>';
-                    }
+                // Get title of the page from metadata
+                foreach ($this->title_metadata as $plugin => $key) {
+                    $title = p_get_metadata($target, $key, METADATA_DONT_RENDER);
+                    if ($title != null) break;
+                }
+                $title = @$title ?: hsc(noNS($item['id']));
+
+                if ($item['type'] == 'd') {
+                    echo '<li><a href="'.wl($target).'" class="twistienav_ns">'.$title.'</a></li>';
+                } else {
+                    echo '<li>'.html_wikilink($target, $title).'</li>';
                 }
             }
             echo '</ul>';
