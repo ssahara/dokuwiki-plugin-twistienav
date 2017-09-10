@@ -2,7 +2,7 @@
  * AJAX functions for the pagename quicksearch
  *
  * @license  GPL2 (http://www.gnu.org/licenses/gpl.html)
- * @author   Håkan Sandell <sandell.hakan@gmail.com>
+ * @author   HÃ¥kan Sandell <sandell.hakan@gmail.com>
  */
 
 var twistienav_plugin = {
@@ -206,3 +206,4 @@ var twistienav_plugin = {
 jQuery(function () {
     twistienav_plugin.init();
 });
+// vim: set fileencoding=utf-8 expandtab ts=4 sw=4 :
