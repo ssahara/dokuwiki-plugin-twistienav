@@ -18,6 +18,22 @@ require_once DOKU_PLUGIN.'action.php';
 
 class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
+    protected $title_metadata = array();
+
+    function __construct() {
+        global $conf;
+
+        // Known plugins that set title and its metadata keys
+        $this->title_metadata = array(
+            'croissant' => 'plugin_croissant_bctitle',
+            'pagetitle' => 'shorttitle',
+        );
+        foreach (array_keys($this->title_metadata) as $plugin) {
+            if(plugin_isdisabled($plugin)) unset($this->title_metadata[$plugin]);
+        }
+        $this->title_metadata[] = 'title';
+    }
+
     /**
      * Register event handlers
      */
@@ -166,10 +182,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         $data = array();
         search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
 
-        if (!plugin_isdisabled('pagetitle')) {
-            $pagetitleHelper = plugin_load('helper', 'pagetitle');
-        }
-
         if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
@@ -181,23 +193,13 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                       $target = $item['id'];
                     }
 
-                    // Get Croissant plugin page title if it exists
-                    $croissantTitle = p_get_metadata($target, 'plugin_croissant_bctitle');
-                    // Get PageTitle plugin page title if it exists
-                    if ($pagetitleHelper != null) {
-                        $pagetitleTitle = $pagetitleHelper->tpl_pagetitle($target, false);
+                    // Get title of the page from metadata
+                    foreach ($this->title_metadata as $plugin => $key) {
+                        $title = p_get_metadata($target, $key, METADATA_DONT_RENDER);
+                        if ($title != null) break;
                     }
+                    $title = @$title ?: hsc(noNS($item['id']));
 
-                    if ($croissantTitle != null) {
-                        $title = $croissantTitle;
-                    // Note that if there's no PageTitle plugin title set, the plugin still offers page name from metadata wich can be an ugly id wich is not what we want
-                    } elseif (($pagetitleTitle != null) && ($pagetitleTitle != $target) && ($pagetitleTitle != $item['id'])) {
-                        $title = $pagetitleTitle;
-                    } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'],FALSE)) {
-                        $title=$title_tmp;
-                    } else {
-                        $title=hsc(noNS($item['id']));
-                    }
                     if ($item['type'] == 'd') {
                         echo '<li><a href="'.wl($target).'" class="twistienav_ns">'.$title.'</a></li>';
                     } else {
