@@ -18,25 +18,28 @@ require_once DOKU_PLUGIN.'action.php';
 
 class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
+    /**
+     * Register event handlers
+     */
     public function register(Doku_Event_Handler $controller) {
         $controller->register_hook('DOKUWIKI_STARTED', 'BEFORE', $this, 'populate_jsinfo', array());
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax_call', array());
     }
 
-    function populate_jsinfo(&$event, $params) {
+    /**
+     * Populate configuration settings to JSINFO
+     */
+    function populate_jsinfo(Doku_Event $event, $params) {
         global $JSINFO, $conf, $ID;
         global $excluded;
 
-        $namespaces = array();
-        $yah_ns = array(0 => '');
-        $bc_ns = array();
-        $pit_ns = array();
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
         $JSINFO['conf']['breadcrumbs'] = $conf['breadcrumbs'];
         $JSINFO['conf']['youarehere'] = $conf['youarehere'];
         $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
+
         if ($this->getConf('exclusions') != null) {
             $exclusions = $this->getConf('exclusions');
             $exclusions = str_replace("start", $conf['start'], $exclusions);
@@ -45,8 +48,10 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         } else {
             $excluded = array();
         }
+
         // List namespaces for YOUAREHERE breadcrumbs
-        if (($conf['youarehere'] == 1) or ($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
+        $yah_ns = array(0 => '');
+        if ($conf['youarehere'] or ($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
             $parts = explode(':', $ID);
             $count = count($parts);
             $part = '';
@@ -55,13 +60,13 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 if ($part == $conf['start']) continue; // Skip start page
                 $elements = 0;
                 // Get index of current crumb namespace
-                $idx  = cleanID(getNs($part));
+                $idx  = cleanID(getNS($part));
                 $dir  = utf8_encodeFN(str_replace(':','/',$idx));
                 $data = array();
                 search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
                 // Count pages that are not in configured exclusions
                 foreach ($data as $item) {
-                    if (!in_array(noNs($item['id']), $excluded)) {
+                    if (!in_array(noNS($item['id']), $excluded)) {
                         $elements++;
                     }
                 }
@@ -72,8 +77,10 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             }
             $JSINFO['plugin_twistienav']['yah_ns'] = $yah_ns;
         }
+
         // List namespaces for TRACE breadcrumbs
-        if ($conf['breadcrumbs']) {
+        $bc_ns = array();
+        if ($conf['breadcrumbs'] > 0) {
             $crumbs = breadcrumbs();
             // get namespaces currently in $crumbs
             $i = -1;
@@ -83,13 +90,13 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 if (($this->getConf('startPagesOnly') == 0) or (strpos($crumbId, $conf['start']) !== false)) {
                     $elements = 0;
                     // Get index of current crumb namespace
-                    $idx  = cleanID(getNs($crumbId));
+                    $idx  = cleanID(getNS($crumbId));
                     $dir  = utf8_encodeFN(str_replace(':','/',$idx));
                     $data = array();
                     search($data,$conf['datadir'],'search_index',array('ns' => $idx),$dir);
                     // Count pages that are not in configured exclusions
                     foreach ($data as $item) {
-                        if (!in_array(noNs($item['id']), $excluded)) {
+                        if (!in_array(noNS($item['id']), $excluded)) {
                             $elements++;
                         }
                     }
@@ -101,9 +108,10 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             }
             $JSINFO['plugin_twistienav']['bc_ns'] = $bc_ns;
         }
+
         // Build 'pageIdTrace' skeleton if required
         if (($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
-            $skeleton = "<span>";
+            $skeleton = '<span>';
             if ($this->getConf('pageIdTrace')) {
                 $parts = explode(':', $ID);
                 $count = count($parts);
@@ -122,16 +130,20 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 $skeleton .= $ID;
             }
             if ($this->getConf('pageIdExtraTwistie')) {
-                $skeleton .= '<a href="javascript:void(0)" class="twistienav_extratwistie'.' '.$this->getConf('style');
-                if ($this->getConf('twistieMap')) { $skeleton .= ' twistienav_map'; }
+                $skeleton .= '<a href="javascript:void(0)" ';
+                $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
+                $skeleton .= ($this->getConf('twistieMap')) ? ' twistienav_map' : '';
                 $skeleton .= '"></a>';
             }
-            $skeleton .= "</span>";
+            $skeleton .= '</span>';
             $JSINFO['plugin_twistienav']['pit_skeleton'] = $skeleton;
         }
     }
 
-    function handle_ajax_call(&$event, $params) {
+    /**
+     * Ajax handler
+     */
+    function handle_ajax_call(Doku_Event $event, $params) {
         global $conf;
 
         // Process AJAX calls from 'plugin_twistienav' or 'plugin_twistienav_pageid'
@@ -141,6 +153,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
         $idx  = cleanID($_POST['idx']);
         $dir  = utf8_encodeFN(str_replace(':','/',$idx));
+
         $exclusions = $this->getConf('exclusions');
         // If AJAX caller is from 'pageId' we don't wan't to exclude start pages
         if ($event->data == 'plugin_twistienav_pageid') {
@@ -160,7 +173,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         if (count($data) != 0) {
             echo '<ul>';
             foreach($data as $item){
-                if (strpos($exclusions, noNs($item['id'])) === false) {
+                if (strpos($exclusions, noNS($item['id'])) === false) {
                     // Build a namespace id that points to it's start page (even if it doesn't exist)
                     if ($item['type'] == 'd') {
                       $target = $item['id'].':'.$conf['start'];
@@ -183,7 +196,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                     } elseif ($conf['useheading'] && $title_tmp=p_get_first_heading($item['id'],FALSE)) {
                         $title=$title_tmp;
                     } else {
-                        $title=hsc(noNs($item['id']));
+                        $title=hsc(noNS($item['id']));
                     }
                     if ($item['type'] == 'd') {
                         echo '<li><a href="'.wl($target).'" class="twistienav_ns">'.$title.'</a></li>';
