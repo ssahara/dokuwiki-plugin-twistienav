@@ -2,7 +2,7 @@
  * AJAX functions for the pagename quicksearch
  *
  * @license  GPL2 (http://www.gnu.org/licenses/gpl.html)
- * @author   Håkan Sandell <sandell.hakan@gmail.com>
+ * @author   HÃ¥kan Sandell <sandell.hakan@gmail.com>
  */
 
 var twistienav_plugin = {
@@ -11,7 +11,7 @@ var twistienav_plugin = {
 
     init: function () {
 		var $match = 0;
-        if ((JSINFO['conf']['breadcrumbs'] >= 1) && (jQuery('div.youarehere').length !== 0)) {
+        if ((JSINFO['conf']['breadcrumbs'] > 0) && (jQuery('div.youarehere').length !== 0)) {
             twistienav_plugin.breadcrumbs('div.youarehere', 'yah_ns');
 			$match++;
         }
@@ -20,7 +20,7 @@ var twistienav_plugin = {
 			$match++;
         }
         if ($match == 0) {
-			if ((JSINFO['conf']['breadcrumbs'] >= 1) && (jQuery('div.breadcrumbs:has("span.bcsep")').length !== 0)) {
+			if ((JSINFO['conf']['breadcrumbs'] > 0) && (jQuery('div.breadcrumbs:has("span.bcsep")').length !== 0)) {
 				twistienav_plugin.breadcrumbs('div.breadcrumbs:has("span.bcsep")', 'bc_ns');
 			}
 			if ((JSINFO['conf']['youarehere'] == 1) && (jQuery('div.breadcrumbs:not(:has("span.bcsep"))').length !== 0)) {
@@ -206,3 +206,4 @@ var twistienav_plugin = {
 jQuery(function () {
     twistienav_plugin.init();
 });
+// vim: set fileencoding=utf-8 expandtab ts=4 sw=4 :
