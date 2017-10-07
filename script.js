@@ -76,7 +76,7 @@ var twistienav_plugin = {
             }
             if ($list[linkNo] || $list[linkNo] == '') {
                 var $classes = 'twistienav_twistie' + ' ' + JSINFO['plugin_twistienav']['style'];
-                if ((JSINFO['plugin_twistienav']['twistiemap'] == 1) && (ns == '')) {
+                if ((JSINFO['plugin_twistienav']['distinctHome'] == 1) && (ns == '')) {
                     $classes = 'twistienav_map' + ' ' + JSINFO['plugin_twistienav']['style'];
                 }
                 jQuery(document.createElement('span'))

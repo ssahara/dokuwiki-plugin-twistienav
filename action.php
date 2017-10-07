@@ -73,7 +73,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
         $JSINFO['plugin_twistienav']['enableTwistie'] = $enableTwistie;
-        $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
+        $JSINFO['plugin_twistienav']['distinctHome'] = $this->getConf('distinctHome');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
 
         // List namespaces for YOUAREHERE breadcrumbs
@@ -160,7 +160,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             if ($this->getConf('pageIdExtraTwistie')) {
                 $skeleton .= '<a href="javascript:void(0)" ';
                 $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
-                $skeleton .= ($this->getConf('twistieMap')) ? ' twistienav_map' : '';
+                $skeleton .= ($this->getConf('distinctHome')) ? ' twistienav_map' : '';
                 $skeleton .= '"></a>';
             }
             $skeleton .= '</span>';
