@@ -69,12 +69,10 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
             $enableTwistie[$type] = $conf[$type] && in_array($type, $types);
         }
         $enableTwistie['pagebox'] = in_array('pagebox', $types);
-        $JSINFO['plugin_twistienav']['enableTwistie'] = $enableTwistie;
 
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
-        $JSINFO['conf']['breadcrumbs'] = $conf['breadcrumbs'];
-        $JSINFO['conf']['youarehere'] = $conf['youarehere'];
+        $JSINFO['plugin_twistienav']['enableTwistie'] = $enableTwistie;
         $JSINFO['plugin_twistienav']['twistiemap'] = $this->getConf('twistieMap');
         $JSINFO['plugin_twistienav']['style'] = $this->getConf('style');
 

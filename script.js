@@ -10,25 +10,25 @@ var twistienav_plugin = {
     $callerObj: null,
 
     init: function () {
-        var $match = 0;
-        if ((JSINFO['conf']['breadcrumbs'] > 0) && (jQuery('div.youarehere').length !== 0)) {
-            twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
-            $match++;
-        }
-        if ((JSINFO['conf']['youarehere'] == 1) && (jQuery('div.trace').length !== 0)) {
-            twistienav_plugin.breadcrumbs('div.youarehere', 'yah_ns');
-            $match++;
-        }
-        if ($match == 0) {
-            if ((JSINFO['conf']['breadcrumbs'] > 0) && (jQuery('div.breadcrumbs:has("span.bcsep")').length !== 0)) {
+
+        if (JSINFO['plugin_twistienav']['enableTwistie']['breadcrumbs']) {
+            if (jQuery('div.youarehere').length !== 0) {
+                twistienav_plugin.breadcrumbs('div.trace', 'bc_ns');
+            } else if (jQuery('div.breadcrumbs:has("span.bcsep")').length !== 0) {
                 twistienav_plugin.breadcrumbs('div.breadcrumbs:has("span.bcsep")', 'bc_ns');
             }
-            if ((JSINFO['conf']['youarehere'] == 1) && (jQuery('div.breadcrumbs:not(:has("span.bcsep"))').length !== 0)) {
+        }
+        if (JSINFO['plugin_twistienav']['enableTwistie']['youarehere']) {
+            if (jQuery('div.trace').length !== 0) {
+                twistienav_plugin.breadcrumbs('div.youarehere', 'yah_ns');
+            } else if (jQuery('div.breadcrumbs:not(:has("span.bcsep"))').length !== 0) {
                 twistienav_plugin.breadcrumbs('div.breadcrumbs:not(:has("span.bcsep"))', 'yah_ns');
             }
         }
-        if ((JSINFO['plugin_twistienav']['pit_skeleton'] != null) && (jQuery('div.pageId').length !== 0)) {
-            twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
+        if (JSINFO['plugin_twistienav']['enableTwistie']['pagebox']) {
+            if (jQuery('div.pageId').length !== 0) {
+                twistienav_plugin.pageIdTrace('div.pageId', 'yah_ns');
+            }
         }
 
         return;
