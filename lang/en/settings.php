@@ -5,6 +5,8 @@
  * @author: Simon Delage <simon.geekitude@gmail.com>
  */
 
+$lang['enableTwistie'] = 'Choose where Twistie navigation to be enabled.';
+
 $lang['startPagesOnly']     = 'Only add TwistieNavs to breadcrumbs leading to a namespace start page.';
 $lang['exclusions']         = 'Only add TwistieNavs to breadcrumbs leading to namespaces containing more than any combination of these pages (you can add your own exclusions in the text field as a comma separated list like <code>topbar,sample</code>). These pages will also be excluded from popup indexes.';
 $lang['twistieMap']         = 'Use map glyph for TwistieNavs showing wiki home index.';

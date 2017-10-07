@@ -5,6 +5,8 @@
  * @author: Simon Delage <simon.geekitude@gmail.com>
  */
 
+$meta['enableTwistie'] = array('multicheckbox', '_choices' => array('youarehere','breadcrumbs','pagebox'), '_other' => 'exists');
+
 $meta['startPagesOnly']     = array('onoff');
 $meta['exclusions']         = array('multicheckbox', '_choices' => array('start','sidebar'));
 $meta['twistieMap']         = array('onoff');

@@ -63,6 +63,14 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
     function populate_jsinfo(Doku_Event $event, $params) {
         global $JSINFO, $conf, $ID;
 
+        // Get options where Twistie navigation should be enabled
+        $types = explode(',', $this->getConf('enableTwistie'));
+        foreach (array('youarehere','breadcrumbs') as $type) {
+            $enableTwistie[$type] = $conf[$type] && in_array($type, $types);
+        }
+        $enableTwistie['pagebox'] = in_array('pagebox', $types);
+        $JSINFO['plugin_twistienav']['enableTwistie'] = $enableTwistie;
+
         // Store settings values in JSINFO
         $JSINFO['conf']['start'] = $conf['start'];
         $JSINFO['conf']['breadcrumbs'] = $conf['breadcrumbs'];
@@ -72,7 +80,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
         // List namespaces for YOUAREHERE breadcrumbs
         $yah_ns = array(0 => '');
-        if ($conf['youarehere'] or ($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
+        if ($enableTwistie['youarehere'] or $enableTwistie['pagebox']) {
             $parts = explode(':', $ID);
             $count = count($parts);
             $part = '';
@@ -101,7 +109,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
 
         // List namespaces for TRACE breadcrumbs
         $bc_ns = array();
-        if ($conf['breadcrumbs'] > 0) {
+        if ($enableTwistie['breadcrumbs']) {
             $crumbs = breadcrumbs();
             // get namespaces currently in $crumbs
             $i = -1;
@@ -132,7 +140,7 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         }
 
         // Build 'pageIdTrace' skeleton if required
-        if (($this->getConf('pageIdTrace')) or ($this->getConf('pageIdExtraTwistie'))) {
+        if ($enableTwistie['pagebox']) {
             $skeleton = '<span>';
             if ($this->getConf('pageIdTrace')) {
                 $parts = explode(':', $ID);

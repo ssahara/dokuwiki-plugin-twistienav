@@ -5,6 +5,8 @@
  * @author: Simon Delage <simon.geekitude@gmail.com>
  */
 
+$conf['enableTwistie'] = 'youarehere,breadcrumbs,pagebox';
+
 $conf['startPagesOnly']     = 1;
 $conf['exclusions']         = 'start,sidebar';
 $conf['twistieMap']         = 1;
