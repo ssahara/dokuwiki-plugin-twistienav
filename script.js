@@ -127,35 +127,18 @@ var twistienav_plugin = {
         var linkNo = 1;
         $links = $traceObj.find('a');
         $links.each(function () {
-            var ns = $list[linkNo];
-            if (ns == false) {
-                ns = '';
-            }
-            if ($list[linkNo] || $list[linkNo] == '') {
-                jQuery(this)
-                            .addClass('twistienav_twistie')
-                            .show()
-                            .insertAfter(this)
-                            .click(function() {
-                                twistie_active = jQuery(this).hasClass('twistienav_down'); 
-                                twistienav_plugin.clear_results();
-                                if (!twistie_active) {
-                                    do_search(this, ns);
-                                }
-                            });
-            } else {
-                jQuery(this)
-                            .addClass('twistienav_twistie')
-                            .show()
-                            .insertAfter(this)
-                            .click(function() {
-                                twistie_active = jQuery(this).hasClass('twistienav_down'); 
-                                twistienav_plugin.clear_results();
-                                if (!twistie_active) {
-                                    do_search(this, '');
-                                }
-                            });
-            }
+            var ns = ($list[linkNo]) ? $list[linkNo] : '';
+            jQuery(this)
+                        .addClass('twistienav_twistie')
+                        .show()
+                        .insertAfter(this)
+                        .click(function() {
+                            twistie_active = jQuery(this).hasClass('twistienav_down'); 
+                            twistienav_plugin.clear_results();
+                            if (!twistie_active) {
+                                do_search(this, ns);
+                            }
+                        });
             linkNo++;
         });
     },
