@@ -8,8 +8,6 @@
 $lang['enableTwistie'] = 'Choose where Twistie navigation to be enabled.';
 
 $lang['startPagesOnly']     = 'Only add TwistieNavs to breadcrumbs leading to a namespace start page.';
-$lang['exclusions']         = 'Only add TwistieNavs to breadcrumbs leading to namespaces containing more than any combination of these pages (you can add your own exclusions in the text field as a comma separated list like <code>topbar,sample</code>). These pages will also be excluded from popup indexes.';
-//$lang['pageIdTrace']        = 'Look for a [<code>pageId</code>] element and try to turn it into a short hierarchical trace with TwistieNavs.';
-//$lang['pageIdExtraTwistie'] = 'Attempt to add an extra TwistieNav after [<code>pageId</code>] element that will show a popup with global index.';
+$lang['exclusions']         = 'Pages to be excluded from popup index of relevant namespace. (you can add your own exclusions in the text field as a comma separated list like <code>topbar,sample</code>).';
 $lang['style']              = 'Use SVG images or Font Awesome glyphs. Font Awesome has to be externally installed (by the template or another plugin).';
 $lang['distinctHome']       = 'Use map glyph for TwistieNavs showing wiki home index.';
