@@ -140,29 +140,28 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         // Build 'pageIdTrace' skeleton if required
         if ($enableTwistie['pagebox']) {
             $skeleton = '<span>';
-            if ($this->getConf('pageIdTrace')) {
-                $parts = explode(':', $ID);
-                $count = count($parts);
-                $part = '';
-                for($i = 1; $i < $count; $i++) {
-                    $part .= $parts[$i-1].':';
-                    if ($part == $conf['start']) continue; // Skip startpage
-                    if (isset($yah_ns[$i])) {
-                        $skeleton .= '<a href="javascript:void(0)">'.$parts[$i-1].'</a>:';
-                    } else {
-                        $skeleton .= $parts[$i-1].':';
-                    }
+
+            // convert each namespace of page ID to twistie
+            $parts = explode(':', $ID);
+            $count = count($parts);
+            $part = '';
+            for($i = 1; $i < $count; $i++) {
+                $part .= $parts[$i-1].':';
+                if ($part == $conf['start']) continue; // Skip startpage
+                if (isset($yah_ns[$i])) {
+                    $skeleton .= '<a href="javascript:void(0)">'.$parts[$i-1].'</a>:';
+                } else {
+                    $skeleton .= $parts[$i-1].':';
                 }
-                $skeleton .= end($parts);
-            } else {
-                $skeleton .= $ID;
             }
-            if ($this->getConf('pageIdExtraTwistie')) {
-                $skeleton .= '<a href="javascript:void(0)" ';
-                $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
-                $skeleton .= ($this->getConf('distinctHome')) ? ' twistienav_map' : '';
-                $skeleton .= '"></a>';
-            }
+            $skeleton .= end($parts);
+
+            // append twistie for root namespace
+            $skeleton .= '<a href="javascript:void(0)" ';
+            $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
+            $skeleton .= ($this->getConf('distinctHome')) ? ' twistienav_map' : '';
+            $skeleton .= '"></a>';
+
             $skeleton .= '</span>';
             $JSINFO['plugin_twistienav']['pit_skeleton'] = $skeleton;
         }
