@@ -124,7 +124,7 @@ var twistienav_plugin = {
         $traceObj.html(JSINFO['plugin_twistienav']['pit_skeleton']);
 
         // transform links into text "twisties"
-        var linkNo = 1;
+        var linkNo = 0;
         $links = $traceObj.find('a');
         $links.each(function () {
             var ns = ($list[linkNo]) ? $list[linkNo] : '';

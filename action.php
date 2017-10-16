@@ -141,6 +141,12 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
         if ($enableTwistie['pagebox']) {
             $skeleton = '<span>';
 
+            // prepend twistie for root namespace
+            $skeleton .= '<a href="javascript:void(0)" ';
+            $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
+            $skeleton .= ($this->getConf('distinctHome')) ? ' twistienav_map' : '';
+            $skeleton .= '"></a>&nbsp;';
+
             // convert each namespace of page ID to twistie
             $parts = explode(':', $ID);
             $count = count($parts);
@@ -155,12 +161,6 @@ class action_plugin_twistienav extends DokuWiki_Action_Plugin {
                 }
             }
             $skeleton .= end($parts);
-
-            // append twistie for root namespace
-            $skeleton .= '<a href="javascript:void(0)" ';
-            $skeleton .= 'class="twistienav_extratwistie'.' '.$this->getConf('style');
-            $skeleton .= ($this->getConf('distinctHome')) ? ' twistienav_map' : '';
-            $skeleton .= '"></a>';
 
             $skeleton .= '</span>';
             $JSINFO['plugin_twistienav']['pit_skeleton'] = $skeleton;
